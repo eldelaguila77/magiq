@@ -6,21 +6,14 @@ export class CategoryController {
     static categoryRepository = AppDataSource.getRepository(Category);
 
     static getAll = async (req: Request, res: Response) => {
-        const categories = await CategoryController.categoryRepository.find({ relations: ["points"] });
+        const categories = await CategoryController.categoryRepository.find();
         res.send(categories);
     };
 
     static getById = async (req: Request, res: Response) => {
-        const { name } = req.params;
+        const { id } = req.params;
         try {
-            const category = await CategoryController.categoryRepository.findOne({
-                where: { name },
-                relations: ["points"]
-            });
-            if (!category) {
-                res.status(404).send("Category not found");
-                return;
-            }
+            const category = await CategoryController.categoryRepository.findOneByOrFail({ id: parseInt(id) });
             res.send(category);
         } catch (error) {
             res.status(404).send("Category not found");
@@ -42,18 +35,18 @@ export class CategoryController {
     };
 
     static update = async (req: Request, res: Response) => {
-        const { name } = req.params;
-        const { newName } = req.body;
+        const { id } = req.params;
+        const { name } = req.body;
         let category;
 
         try {
-            category = await CategoryController.categoryRepository.findOneByOrFail({ name });
+            category = await CategoryController.categoryRepository.findOneByOrFail({ id: parseInt(id) });
         } catch (error) {
             res.status(404).send("Category not found");
             return;
         }
 
-        category.name = newName || category.name;
+        category.name = name || category.name;
 
         try {
             await CategoryController.categoryRepository.save(category);
@@ -65,14 +58,14 @@ export class CategoryController {
     };
 
     static delete = async (req: Request, res: Response) => {
-        const { name } = req.params;
+        const { id } = req.params;
         try {
-            await CategoryController.categoryRepository.findOneByOrFail({ name });
+            await CategoryController.categoryRepository.findOneByOrFail({ id: parseInt(id) });
         } catch (error) {
             res.status(404).send("Category not found");
             return;
         }
-        CategoryController.categoryRepository.delete(name);
+        CategoryController.categoryRepository.delete(id);
         res.status(204).send();
     };
 }

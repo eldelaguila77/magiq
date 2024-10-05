@@ -3,6 +3,7 @@ import { User } from './User';
 import { Photo } from './Photo';
 import { Comment } from './Comment';
 import { Notification } from './Notification';
+import { Category } from './Category';
 
 @Entity()
 export class Point {
@@ -18,8 +19,8 @@ export class Point {
     @Column()
     location!: string;
 
-    @Column()
-    category!: string;
+    @ManyToOne(() => Category, category => category.points)
+    category!: Category;
 
     @Column()
     status!: string;
