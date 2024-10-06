@@ -10,6 +10,8 @@ import userPointsRoutes from "./routes/userPointsRoutes";
 import medalRoutes from "./routes/medalRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import notificationRoutes from "./routes/notificationRoutes";
+import categoryRoutes from "./routes/categoryRoutes";
+import categoryMarkerRoutes from "./routes/categoryMarkerRoutes";
 import { authMiddleware } from "./middleware/auth";
 
 dotenv.config();
@@ -32,6 +34,8 @@ async function main() {
     app.use("/medals", medalRoutes);
     app.use("/comments", commentRoutes);
     app.use("/notifications", notificationRoutes);
+    app.use("/categories", categoryRoutes);
+    app.use("/categoryMarkers", categoryMarkerRoutes);
 
     app.listen(process.env.PORT || 3000, () => {
         console.log(`Server running on port ${process.env.PORT || 3000}`);
