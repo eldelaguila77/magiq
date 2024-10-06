@@ -74,7 +74,9 @@ export class PointController {
         const eligibleMedal = sortedMedals.find(medal => totalPoints >= medal.required_points);
         console.log("eligibleMedal", eligibleMedal);
 
-        if (eligibleMedal && (totalPoints <= eligibleMedal.required_points)) {
+        const highestMedal = sortedMedals[0];
+
+        if (eligibleMedal && (totalPoints <= highestMedal.required_points)) {
             userPoints.medal = eligibleMedal;
             await UserPointsController.userPointsRepository.save(userPoints);
         }
