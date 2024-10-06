@@ -27,6 +27,19 @@ export class UserPointsController {
         }
     };
 
+    static getByUserId = async (req: Request, res: Response) => {
+        const { userId } = req.params;
+        try {
+            const userPoints = await UserPointsController.userPointsRepository.find({
+                where: { user: {id: parseInt(userId)} },
+                relations: ["user", "medal"]
+            });
+            res.send(userPoints);
+        } catch (error) {
+            res.status(404).send("UserPoints not found");
+        }
+    };
+
     static create = async (req: Request, res: Response) => {
         const { points, userId, medalName } = req.body;
         const userPoints = new UserPoints();

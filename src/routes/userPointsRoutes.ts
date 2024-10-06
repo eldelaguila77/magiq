@@ -5,6 +5,7 @@ const router = Router();
 
 router.get("/", UserPointsController.getAll);
 router.get("/:id", UserPointsController.getById);
+router.get("/user/:userId", UserPointsController.getByUserId);
 router.post("/", UserPointsController.create);
 router.put("/:id", UserPointsController.update);
 router.delete("/:id", UserPointsController.delete);
