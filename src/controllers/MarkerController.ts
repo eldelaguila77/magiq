@@ -21,10 +21,11 @@ export class MarkerController {
     };
 
     static create = async (req: Request, res: Response) => {
-        const { phone_number, location, address, link, userId } = req.body;
+        const { phone_number, lat, long, address, link, userId } = req.body;
         const marker = new Marker();
         marker.phone_number = phone_number;
-        marker.location = location;
+        marker.lat = lat || marker.lat;
+        marker.long = long || marker.long;
         marker.address = address;
         marker.link = link;
         marker.user = userId;
@@ -40,7 +41,7 @@ export class MarkerController {
 
     static update = async (req: Request, res: Response) => {
         const { id } = req.params;
-        const { phone_number, location, address, link, userId } = req.body;
+        const { phone_number, lat, long, address, link, userId } = req.body;
         let marker;
 
         try {
@@ -51,7 +52,8 @@ export class MarkerController {
         }
 
         marker.phone_number = phone_number || marker.phone_number;
-        marker.location = location || marker.location;
+        marker.lat = lat || marker.lat;
+        marker.long = long || marker.long;
         marker.address = address || marker.address;
         marker.link = link || marker.link;
         marker.user = userId || marker.user;

@@ -28,11 +28,12 @@ export class PointController {
     };
 
     static create = async (req: Request, res: Response) => {
-        const { title, description, location, categoryId, status, link, userId } = req.body;
+        const { title, description, lat, long, categoryId, status, link, userId } = req.body;
         const point = new Point();
         point.title = title;
         point.description = description;
-        point.location = location;
+        point.lat = lat || point.lat;
+        point.long = long || point.long;
         point.category = categoryId;
         point.status = status;
         point.link = link;
@@ -49,7 +50,7 @@ export class PointController {
 
     static update = async (req: Request, res: Response) => {
         const { id } = req.params;
-        const { title, description, location, categoryId, status, link, userId } = req.body;
+        const { title, description, lat, long, categoryId, status, link, userId } = req.body;
         let point;
 
         try {
@@ -61,7 +62,8 @@ export class PointController {
 
         point.title = title || point.title;
         point.description = description || point.description;
-        point.location = location || point.location;
+        point.lat = lat || point.lat;
+        point.long = long || point.long;
         point.category = categoryId || point.category;
         point.status = status || point.status;
         point.link = link || point.link;

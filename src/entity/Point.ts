@@ -16,8 +16,11 @@ export class Point {
     @Column()
     description!: string;
 
-    @Column()
-    location!: string;
+    @Column({ type: 'float', precision: 25, scale: 15})
+    lat!: number;
+
+    @Column({ type: 'float', precision: 25, scale: 15})
+    long!: number;
 
     @ManyToOne(() => Category, category => category.points)
     category!: Category;
