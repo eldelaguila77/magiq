@@ -13,11 +13,17 @@ import notificationRoutes from "./routes/notificationRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
 import categoryMarkerRoutes from "./routes/categoryMarkerRoutes";
 import { authMiddleware } from "./middleware/auth";
+import cors from "cors";
 
 dotenv.config();
 
 async function main() {
     const app = express();
+    app.use(cors({
+        origin: "*",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"]
+    }));
     await AppDataSource.initialize()
     app.use(express.json());
     app.use((req, res, next) => {
