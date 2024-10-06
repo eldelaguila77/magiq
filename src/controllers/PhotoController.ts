@@ -26,14 +26,15 @@ export class PhotoController {
         photo.url = url;
         photo.point = pointId;
         photo.marker = markerId;
+        let newPhoto;
 
         try {
-            await PhotoController.photoRepository.save(photo);
+            newPhoto = await PhotoController.photoRepository.save(photo);
         } catch (error) {
             res.status(409).send("Photo creation failed");
             return;
         }
-        res.status(201).send("Photo created");
+        res.status(201).send(newPhoto);
     };
 
     static update = async (req: Request, res: Response) => {

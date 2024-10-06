@@ -24,14 +24,15 @@ export class CategoryController {
         const { name } = req.body;
         const category = new Category();
         category.name = name;
+        let newCategory;
 
         try {
-            await CategoryController.categoryRepository.save(category);
+            newCategory = await CategoryController.categoryRepository.save(category);
         } catch (error) {
             res.status(409).send("Category creation failed");
             return;
         }
-        res.status(201).send("Category created");
+        res.status(201).send(newCategory);
     };
 
     static update = async (req: Request, res: Response) => {

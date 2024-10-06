@@ -33,14 +33,15 @@ export class UserPointsController {
         userPoints.points = points;
         userPoints.user = userId;
         userPoints.medal = medalName;
+        let newUserPoints;
 
         try {
-            await UserPointsController.userPointsRepository.save(userPoints);
+            newUserPoints = await UserPointsController.userPointsRepository.save(userPoints);
         } catch (error) {
             res.status(409).send("UserPoints creation failed");
             return;
         }
-        res.status(201).send("UserPoints created");
+        res.status(201).send(newUserPoints);
     };
 
     static update = async (req: Request, res: Response) => {

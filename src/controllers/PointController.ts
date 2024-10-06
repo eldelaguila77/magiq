@@ -38,14 +38,15 @@ export class PointController {
         point.status = status;
         point.link = link;
         point.user = userId;
+        let newPoint;
 
         try {
-            await PointController.pointRepository.save(point);
+            newPoint = await PointController.pointRepository.save(point);
         } catch (error) {
             res.status(409).send("Point creation failed");
             return;
         }
-        res.status(201).send("Point created");
+        res.status(201).send(newPoint);
     };
 
     static update = async (req: Request, res: Response) => {

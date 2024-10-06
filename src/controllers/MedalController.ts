@@ -33,14 +33,15 @@ export class MedalController {
         medal.name = name;
         medal.description = description;
         medal.required_points = required_points;
+        let newMedal;
 
         try {
-            await MedalController.medalRepository.save(medal);
+            newMedal = await MedalController.medalRepository.save(medal);
         } catch (error) {
             res.status(409).send("Medal creation failed");
             return;
         }
-        res.status(201).send("Medal created");
+        res.status(201).send(newMedal);
     };
 
     static update = async (req: Request, res: Response) => {

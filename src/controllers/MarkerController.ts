@@ -29,14 +29,15 @@ export class MarkerController {
         marker.address = address;
         marker.link = link;
         marker.user = userId;
+        let newMarker;
 
         try {
-            await MarkerController.markerRepository.save(marker);
+            newMarker = await MarkerController.markerRepository.save(marker);
         } catch (error) {
             res.status(409).send("Marker creation failed");
             return;
         }
-        res.status(201).send("Marker created");
+        res.status(201).send(newMarker);
     };
 
     static update = async (req: Request, res: Response) => {

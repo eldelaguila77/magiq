@@ -34,14 +34,15 @@ export class NotificationController {
         notification.message = message;
         notification.user = userId;
         notification.point = pointId;
+        let newNotification;
 
         try {
-            await NotificationController.notificationRepository.save(notification);
+            newNotification = await NotificationController.notificationRepository.save(notification);
         } catch (error) {
             res.status(409).send("Notification creation failed");
             return;
         }
-        res.status(201).send("Notification created");
+        res.status(201).send(newNotification);
     };
 
     static update = async (req: Request, res: Response) => {

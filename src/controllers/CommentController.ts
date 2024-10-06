@@ -33,14 +33,15 @@ export class CommentController {
         comment.content = content;
         comment.user = userId;
         comment.point = pointId;
+        let newComment;
 
         try {
-            await CommentController.commentRepository.save(comment);
+            newComment = await CommentController.commentRepository.save(comment);
         } catch (error) {
             res.status(409).send("Comment creation failed");
             return;
         }
-        res.status(201).send("Comment created");
+        res.status(201).send(newComment);
     };
 
     static update = async (req: Request, res: Response) => {
