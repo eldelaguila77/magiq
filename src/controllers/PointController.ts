@@ -1,9 +1,13 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../config/typeorm';
 import { Point } from '../entity/Point';
+import { UserPoints } from '../entity/UserPoints';
+import { UserPointsController } from './UserPointsController';
+import { MedalController } from './MedalController';
 
 export class PointController {
     static pointRepository = AppDataSource.getRepository(Point);
+    static userPointsRepository = AppDataSource.getRepository(UserPoints);
 
     static getAll = async (req: Request, res: Response) => {
         const points = await PointController.pointRepository.find({ relations: ["photos", "user"] });
@@ -45,6 +49,34 @@ export class PointController {
         } catch (error) {
             res.status(409).send("Point creation failed");
             return;
+        }
+
+        // Buscar los puntos acumulados del usuario
+        const userPointsList = await UserPointsController.userPointsRepository.find({ where: { user: {id: userId} } });
+        console.log("userPointsList", userPointsList);
+        const totalPoints = userPointsList.reduce((sum, userPoints) => sum + userPoints.points, 0) + 5;
+        console.log("totalPoints", totalPoints);
+
+        // Crear y guardar los nuevos puntos del usuario
+        const userPoints = new UserPoints();
+        userPoints.user = userId;
+        userPoints.points = 5;
+        userPoints.achieved_at = new Date();
+        //await UserPointsController.userPointsRepository.save(userPoints);
+
+        // Buscar las medallas que el usuario puede obtener
+        const medals = await MedalController.medalRepository.find();
+        console.log("medals", medals);
+        // Ordenar las medallas por required_points en orden descendente
+        const sortedMedals = medals.sort((a, b) => b.required_points - a.required_points);
+        console.log("sortedMedals", sortedMedals);
+        // Encontrar la primera medalla que cumpla con la condición
+        const eligibleMedal = sortedMedals.find(medal => totalPoints >= medal.required_points);
+        console.log("eligibleMedal", eligibleMedal);
+
+        if (eligibleMedal && (totalPoints <= eligibleMedal.required_points)) {
+            userPoints.medal = eligibleMedal;
+            await UserPointsController.userPointsRepository.save(userPoints);
         }
         res.status(201).send(newPoint);
     };
