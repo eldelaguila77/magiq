@@ -27,6 +27,19 @@ export class CommentController {
         }
     };
 
+    static getByPointId = async (req: Request, res: Response) => {
+        const { pointId } = req.params;
+        try {
+            const comments = await CommentController.commentRepository.find({
+                where: { point: {id: parseInt(pointId)} },
+                relations: ["user", "point"]
+            });
+            res.send(comments);
+        } catch (error) {
+            res.status(404).send("Comments not found");
+        }
+    };
+
     static create = async (req: Request, res: Response) => {
         const { content, userId, pointId } = req.body;
         const comment = new Comment();
