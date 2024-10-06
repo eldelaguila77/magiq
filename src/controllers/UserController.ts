@@ -63,7 +63,7 @@ export class UserController {
         const user = await UserController.userRepository.findOne({ where: { email } });
         if (user && await bcrypt.compare(password, user.password)) {
         const token = jwt.sign({ id: user.id }, "your_jwt_secret", { expiresIn: "1h" });
-        res.json({ token, id: user.id });
+        res.json({ token, userId: user.id });
         } else {
         res.status(401).json({ message: "Invalid credentials" });
         }
